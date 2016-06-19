@@ -1,2 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/home/tankaide/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.3.1/19047bdb6a4fc00a44124f64ca98e88fc204e7e3/okhttp-3.3.1.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="19047bdb6a4fc00a44124f64ca98e88fc204e7e3">
+        <dex dex="/home/tankaide/UpdateAcution/app/build/intermediates/pre-dexed/debug/okhttp-3.3.1_f5e6738342adad70fb764470e816d2c8170ef45d.jar" />
+    </item>
+    <item
+        jar="/home/tankaide/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="/home/tankaide/UpdateAcution/app/build/intermediates/pre-dexed/debug/support-annotations-23.4.0_112f2a95e234f3e43145751f060c9ccf0a5ef967.jar" />
+    </item>
+    <item
+        jar="/home/tankaide/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.5.1/e2a00ad1d7e540ec395e9296a34da484c8888d4d/jackson-core-2.5.1.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="e2a00ad1d7e540ec395e9296a34da484c8888d4d">
+        <dex dex="/home/tankaide/UpdateAcution/app/build/intermediates/pre-dexed/debug/jackson-core-2.5.1_8b52759e11288f9bf51dd2ab7c50bdd732bb17e4.jar" />
+    </item>
+    <item
+        jar="/home/tankaide/.gradle/caches/modules-2/files-2.1/com.bluelinelabs/logansquare/1.3.6/2e059622d3d37758b0f8022fd678de02b025cbe8/logansquare-1.3.6.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="2e059622d3d37758b0f8022fd678de02b025cbe8">
+        <dex dex="/home/tankaide/UpdateAcution/app/build/intermediates/pre-dexed/debug/logansquare-1.3.6_a8738d8b1e4a92aec08795ef6fef740528091768.jar" />
+    </item>
+    <item
+        jar="/home/tankaide/UpdateAcution/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="/home/tankaide/UpdateAcution/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-23.4.0_ba579129e812244c6b20c7753eb96564e66f9c85.jar" />
+    </item>
+    <item
+        jar="/home/tankaide/UpdateAcution/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="/home/tankaide/UpdateAcution/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.4.0_6ef9600945eff4f12861f36aca0549ae3479d34b.jar" />
+    </item>
+    <item
+        jar="/home/tankaide/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.8.0/5ea7af56cc7c567ed9856d99efb30740e9b17ff/okio-1.8.0.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="05ea7af56cc7c567ed9856d99efb30740e9b17ff">
+        <dex dex="/home/tankaide/UpdateAcution/app/build/intermediates/pre-dexed/debug/okio-1.8.0_22ca490769191b2e817b0b68cdb0233db3898d79.jar" />
+    </item>
+    <item
+        jar="/home/tankaide/UpdateAcution/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="/home/tankaide/UpdateAcution/app/build/intermediates/pre-dexed/debug/internal_impl-23.4.0_701d73d609265b18dc00c2232f086ed654c6185d.jar" />
+    </item>
+    <item
+        jar="/home/tankaide/UpdateAcution/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="/home/tankaide/UpdateAcution/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-23.4.0_ad5b4b12dbf5a0f042b1ee3295bbe51953d4a878.jar" />
+    </item>
+    <item
+        jar="/home/tankaide/UpdateAcution/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="/home/tankaide/UpdateAcution/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.4.0_6cf3a502e22b098565410168ed8d9787caa1e0af.jar" />
+    </item>
+
+</items>
