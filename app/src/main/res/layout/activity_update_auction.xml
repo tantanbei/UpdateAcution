@@ -32,4 +32,12 @@
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="start"
+        android:layout_gravity="center"/>
 </LinearLayout>

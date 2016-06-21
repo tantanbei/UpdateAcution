@@ -3,9 +3,7 @@ package com.tantanbei.updateauction;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,11 +27,13 @@ public class ActivityUpdateAuction extends Activity {
     public static final MediaType TEXT = MediaType.parse("text/plain; charset=utf-8");
     private final String url = "http://192.168.1.2:80/auction/update";
     private final String urlGet = "http://192.168.1.2:80/auction/price";
+    private final String urlStart = "http://192.168.1.2:80/auction/start";
 
     EditText warningPrice;
     Button plusOneHundred;
     TextView localPrice;
     TextView webPrice;
+    Button start;
 
     int currentPrice;
 
@@ -48,6 +48,7 @@ public class ActivityUpdateAuction extends Activity {
         plusOneHundred = (Button) findViewById(R.id.plus_one_hundred);
         localPrice = (TextView) findViewById(R.id.local_price);
         webPrice = (TextView) findViewById(R.id.web_price);
+        start = (Button) findViewById(R.id.start);
 
         plusOneHundred.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +84,42 @@ public class ActivityUpdateAuction extends Activity {
                     }
                 });
                 thread2.start();
+            }
+        });
+
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StartAuction startAuction = new StartAuction();
+                startAuction.cautionPrice = Integer.parseInt(warningPrice.getText().toString());
+                startAuction.overTime = System.currentTimeMillis() + 120000;
+
+                RequestBody body = null;
+                try {
+                     body = RequestBody.create(TEXT, LoganSquare.serialize(startAuction));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Request request = new Request.Builder()
+                        .url(urlStart)
+                        .method("POST", body)
+                        .build();
+
+                Call call = client.newCall(request);
+
+                call.enqueue(new Callback() {
+
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.e("tan", "onFailure: " + e);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        response.close();
+                    }
+                });
             }
         });
     }
