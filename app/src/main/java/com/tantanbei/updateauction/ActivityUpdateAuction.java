@@ -25,15 +25,17 @@ import okhttp3.Response;
 public class ActivityUpdateAuction extends Activity {
 
     public static final MediaType TEXT = MediaType.parse("text/plain; charset=utf-8");
-    private final String url = "http://192.168.1.2:80/auction/update";
-    private final String urlGet = "http://192.168.1.2:80/auction/price";
-    private final String urlStart = "http://192.168.1.2:80/auction/start";
+    private final String url = "http://192.168.1.4:80/auction/update";
+    private final String urlGet = "http://192.168.1.4:80/auction/price";
+    private final String urlStart = "http://192.168.1.4:80/auction/start";
+    private final String urlEnd = "http://192.168.1.4:80/auction/end";
 
     EditText warningPrice;
     Button plusOneHundred;
     TextView localPrice;
     TextView webPrice;
     Button start;
+    Button end;
 
     int currentPrice;
 
@@ -49,6 +51,7 @@ public class ActivityUpdateAuction extends Activity {
         localPrice = (TextView) findViewById(R.id.local_price);
         webPrice = (TextView) findViewById(R.id.web_price);
         start = (Button) findViewById(R.id.start);
+        end = (Button) findViewById(R.id.end);
 
         plusOneHundred.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,20 +73,20 @@ public class ActivityUpdateAuction extends Activity {
                 });
                 thread.start();
 
-                Thread thread2 = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        while (true) {
-                            getCurrentPrice(urlGet);
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
-                thread2.start();
+//                Thread thread2 = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        while (true) {
+//                            getCurrentPrice(urlGet);
+//                            try {
+//                                Thread.sleep(100);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                });
+//                thread2.start();
             }
         });
 
@@ -96,30 +99,49 @@ public class ActivityUpdateAuction extends Activity {
 
                 RequestBody body = null;
                 try {
-                     body = RequestBody.create(TEXT, LoganSquare.serialize(startAuction));
+                    body = RequestBody.create(TEXT, LoganSquare.serialize(startAuction));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                Request request = new Request.Builder()
+                final Request request = new Request.Builder()
                         .url(urlStart)
                         .method("POST", body)
                         .build();
 
-                Call call = client.newCall(request);
-
-                call.enqueue(new Callback() {
-
+                new Thread(new Runnable() {
                     @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e("tan", "onFailure: " + e);
+                    public void run() {
+                        try {
+                            client.newCall(request).execute();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+                }).start();
+            }
+        });
 
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Request request = new Request.Builder()
+                        .url(urlEnd)
+                        .method("GET", null)
+                        .build();
+
+
+                new Thread(new Runnable() {
                     @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        response.close();
+                    public void run() {
+                        try {
+                            client.newCall(request).execute();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                });
+                }).start();
+
             }
         });
     }

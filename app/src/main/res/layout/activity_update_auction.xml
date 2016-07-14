@@ -40,4 +40,13 @@
         android:layout_weight="1"
         android:text="start"
         android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/end"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="end"
+        android:layout_gravity="center"/>
+
 </LinearLayout>
