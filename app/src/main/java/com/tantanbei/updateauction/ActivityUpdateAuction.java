@@ -2,15 +2,22 @@ package com.tantanbei.updateauction;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bluelinelabs.logansquare.LoganSquare;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,6 +33,9 @@ public class ActivityUpdateAuction extends Activity {
     private final String urlStart = Const.SERVER_IP + "/auction/start";
     private final String urlEnd = Const.SERVER_IP + "/auction/end";
 
+    Timer timer = new Timer(true);
+    TimerTask timerTask;
+
     EditText cautionPrice;
     EditText limitation;
     EditText overTime;
@@ -34,7 +44,6 @@ public class ActivityUpdateAuction extends Activity {
     Button addTen;
     Button addHundred;
     Button addThousand;
-    TextView localPrice;
     TextView webStatus;
     Button start;
     Button end;
@@ -68,7 +77,6 @@ public class ActivityUpdateAuction extends Activity {
                     return;
                 }
                 currentPrice += 100;
-                localPrice.setText(String.valueOf(currentPrice));
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -80,21 +88,6 @@ public class ActivityUpdateAuction extends Activity {
                     }
                 });
                 thread.start();
-
-//                Thread thread2 = new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        while (true) {
-//                            getCurrentPrice(urlGet);
-//                            try {
-//                                Thread.sleep(100);
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//                });
-//                thread2.start();
             }
         });
 
@@ -193,10 +186,10 @@ public class ActivityUpdateAuction extends Activity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try{
+                        try {
                             client.newCall(request).execute().close();
 
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -208,6 +201,15 @@ public class ActivityUpdateAuction extends Activity {
         addTen.setOnClickListener(listener);
         addHundred.setOnClickListener(listener);
         addThousand.setOnClickListener(listener);
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                getCurrentPrice(Const.SERVER_IP + "/auction/price");
+            }
+        };
+
+        timer.schedule(timerTask, 1000, 300);
     }
 
     private String post(String url, String price) throws IOException {
@@ -225,46 +227,71 @@ public class ActivityUpdateAuction extends Activity {
         }
     }
 
-//    private void getCurrentPrice(String urlUpdatePrice) {
-//        Request request = new Request.Builder()
-//                .urlUpdatePrice(urlUpdatePrice)
-//                .method("GET", null)
-//                .build();
-//
-//        Call call = client.newCall(request);
-//
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                Log.d("tan", e.toString());
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, final Response response) throws IOException {
-//                final String str = response.body().string();
-//
-//                final CurrentPrice currPrice = LoganSquare.parse(str, CurrentPrice.class);
-//
-//                Log.d("tan", "carPrices: " + currPrice.toString());
-//                new Handler(Looper.getMainLooper()).post(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-//
-//                            @Override
-//                            public void run() {
-//                                Log.d("tan", "text price:" + webStatus.getText().toString() + " curr price:" + currPrice.price);
-//                                if (webStatus.getText().toString().equals("")) {
-//                                    webStatus.setText(String.valueOf(currPrice.price));
-//                                } else if (Integer.parseInt(webStatus.getText().toString()) < currPrice.price) {
-//                                    webStatus.setText(String.valueOf(currPrice.price));
-//                                }
-//                            }
-//                        });
-//                    }
-//                });
-//            }
-//        });
-//    }
+    private void getCurrentPrice(String url) {
+
+        Request request = new Request.Builder()
+                .url(url)
+                .method("GET", null)
+                .build();
+
+        Call call = client.newCall(request);
+
+        try {
+
+            Response response = call.execute();
+            final byte[] bs = response.body().bytes();
+            if (bs == null || bs.length == 0) {
+                return;
+            }
+
+            switch (bs[0]) {
+                case '1':
+                    App.Uihandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ActivityUpdateAuction.this, "unstart", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    timerTask.cancel();
+                    return;
+                case '2':
+                    App.Uihandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ActivityUpdateAuction.this, "over", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    timerTask.cancel();
+                    return;
+            }
+
+            final CurrentPacket currentPacket = LoganSquare.parse(new String(bs, 1, bs.length - 1, "UTF-8"), CurrentPacket.class);
+            final int price = currentPacket.currentTransactionPrice;
+            final int people = currentPacket.peopleNumber;
+
+            App.Uihandler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    currentPrice = price;
+                    currentPeople = people;
+                    webStatus.setText("price:" + price + "\npeople:" + people);
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            App.Uihandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(ActivityUpdateAuction.this, "request error", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            timer.cancel();
+        } finally {
+            call.cancel();
+        }
+    }
 }
