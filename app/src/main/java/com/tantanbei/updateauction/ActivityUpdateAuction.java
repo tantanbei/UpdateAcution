@@ -20,7 +20,8 @@ import okhttp3.Response;
 public class ActivityUpdateAuction extends Activity {
 
     public static final MediaType TEXT = MediaType.parse("text/plain; charset=utf-8");
-    private final String url = Const.SERVER_IP + "/auction/update";
+    private final String urlUpdatePrice = Const.SERVER_IP + "/auction/update";
+    private final String urlUpdatePeople = Const.SERVER_IP + "/auction/update/people";
     private final String urlGet = Const.SERVER_IP + "/auction/price";
     private final String urlStart = Const.SERVER_IP + "/auction/start";
     private final String urlEnd = Const.SERVER_IP + "/auction/end";
@@ -29,12 +30,17 @@ public class ActivityUpdateAuction extends Activity {
     EditText limitation;
     EditText overTime;
     Button plusOneHundred;
+    Button addOne;
+    Button addTen;
+    Button addHundred;
+    Button addThousand;
     TextView localPrice;
-    TextView webPrice;
+    TextView webStatus;
     Button start;
     Button end;
 
-    int currentPrice;
+    int currentPrice = 0;
+    int currentPeople = -1;
 
     OkHttpClient client = new OkHttpClient();
 
@@ -47,8 +53,11 @@ public class ActivityUpdateAuction extends Activity {
         limitation = (EditText) findViewById(R.id.limitation);
         overTime = (EditText) findViewById(R.id.over_time);
         plusOneHundred = (Button) findViewById(R.id.plus_one_hundred);
-        localPrice = (TextView) findViewById(R.id.local_price);
-        webPrice = (TextView) findViewById(R.id.web_price);
+        addOne = (Button) findViewById(R.id.add_one);
+        addTen = (Button) findViewById(R.id.add_ten);
+        addHundred = (Button) findViewById(R.id.add_hundred);
+        addThousand = (Button) findViewById(R.id.add_thousand);
+        webStatus = (TextView) findViewById(R.id.web_status);
         start = (Button) findViewById(R.id.start);
         end = (Button) findViewById(R.id.end);
 
@@ -56,7 +65,7 @@ public class ActivityUpdateAuction extends Activity {
             @Override
             public void onClick(View v) {
                 if (currentPrice == 0) {
-                    currentPrice = Integer.parseInt(cautionPrice.getText().toString());
+                    return;
                 }
                 currentPrice += 100;
                 localPrice.setText(String.valueOf(currentPrice));
@@ -64,7 +73,7 @@ public class ActivityUpdateAuction extends Activity {
                     @Override
                     public void run() {
                         try {
-                            post(url, String.valueOf(currentPrice));
+                            post(urlUpdatePrice, String.valueOf(currentPrice));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -94,11 +103,11 @@ public class ActivityUpdateAuction extends Activity {
             public void onClick(View v) {
                 StartAuction startAuction = new StartAuction();
 
-                if (XString.IsEmpty(cautionPrice.getText().toString())||XString.IsEmpty(limitation.getText().toString())||XString.IsEmpty(overTime.getText().toString())){
+                if (XString.IsEmpty(cautionPrice.getText().toString()) || XString.IsEmpty(limitation.getText().toString()) || XString.IsEmpty(overTime.getText().toString())) {
                     startAuction.cautionPrice = 84800;
                     startAuction.overTime = 1469244600000L;
                     startAuction.limitation = 11475;
-                }else {
+                } else {
                     startAuction.cautionPrice = Integer.parseInt(cautionPrice.getText().toString());
                     startAuction.overTime = Long.parseLong(overTime.getText().toString());
                     startAuction.limitation = Integer.parseInt(limitation.getText().toString());
@@ -120,7 +129,7 @@ public class ActivityUpdateAuction extends Activity {
                     @Override
                     public void run() {
                         try {
-                            client.newCall(request).execute();
+                            client.newCall(request).execute().close();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -142,7 +151,7 @@ public class ActivityUpdateAuction extends Activity {
                     @Override
                     public void run() {
                         try {
-                            client.newCall(request).execute();
+                            client.newCall(request).execute().close();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -151,6 +160,54 @@ public class ActivityUpdateAuction extends Activity {
 
             }
         });
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPeople < 0) {
+                    return;
+                }
+
+                int tmp = currentPeople;
+
+                switch (v.getId()) {
+                    case R.id.add_one:
+                        tmp++;
+                        break;
+                    case R.id.add_ten:
+                        tmp += 10;
+                        break;
+                    case R.id.add_hundred:
+                        tmp += 100;
+                        break;
+                    case R.id.add_thousand:
+                        tmp += 1000;
+                        break;
+                }
+
+                RequestBody body = RequestBody.create(TEXT, String.valueOf(tmp));
+                final Request request = new Request.Builder()
+                        .url(urlUpdatePeople)
+                        .post(body)
+                        .build();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            client.newCall(request).execute().close();
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
+        };
+
+        addOne.setOnClickListener(listener);
+        addTen.setOnClickListener(listener);
+        addHundred.setOnClickListener(listener);
+        addThousand.setOnClickListener(listener);
     }
 
     private String post(String url, String price) throws IOException {
@@ -168,9 +225,9 @@ public class ActivityUpdateAuction extends Activity {
         }
     }
 
-//    private void getCurrentPrice(String url) {
+//    private void getCurrentPrice(String urlUpdatePrice) {
 //        Request request = new Request.Builder()
-//                .url(url)
+//                .urlUpdatePrice(urlUpdatePrice)
 //                .method("GET", null)
 //                .build();
 //
@@ -197,11 +254,11 @@ public class ActivityUpdateAuction extends Activity {
 //
 //                            @Override
 //                            public void run() {
-//                                Log.d("tan", "text price:" + webPrice.getText().toString() + " curr price:" + currPrice.price);
-//                                if (webPrice.getText().toString().equals("")) {
-//                                    webPrice.setText(String.valueOf(currPrice.price));
-//                                } else if (Integer.parseInt(webPrice.getText().toString()) < currPrice.price) {
-//                                    webPrice.setText(String.valueOf(currPrice.price));
+//                                Log.d("tan", "text price:" + webStatus.getText().toString() + " curr price:" + currPrice.price);
+//                                if (webStatus.getText().toString().equals("")) {
+//                                    webStatus.setText(String.valueOf(currPrice.price));
+//                                } else if (Integer.parseInt(webStatus.getText().toString()) < currPrice.price) {
+//                                    webStatus.setText(String.valueOf(currPrice.price));
 //                                }
 //                            }
 //                        });
