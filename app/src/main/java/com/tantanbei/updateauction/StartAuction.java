@@ -6,8 +6,11 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 @JsonObject
 public class StartAuction {
     @JsonField
-    long overTime;
+    long overTime;//multi second
 
     @JsonField
     int cautionPrice;
+
+    @JsonField
+    int limitation;
 }

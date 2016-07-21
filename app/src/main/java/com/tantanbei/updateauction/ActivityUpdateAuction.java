@@ -1,10 +1,7 @@
 package com.tantanbei.updateauction;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +11,6 @@ import com.bluelinelabs.logansquare.LoganSquare;
 
 import java.io.IOException;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -25,12 +20,14 @@ import okhttp3.Response;
 public class ActivityUpdateAuction extends Activity {
 
     public static final MediaType TEXT = MediaType.parse("text/plain; charset=utf-8");
-    private final String url = "http://192.168.1.4:80/auction/update";
-    private final String urlGet = "http://192.168.1.4:80/auction/price";
-    private final String urlStart = "http://192.168.1.4:80/auction/start";
-    private final String urlEnd = "http://192.168.1.4:80/auction/end";
+    private final String url = Const.SERVER_IP + "/auction/update";
+    private final String urlGet = Const.SERVER_IP + "/auction/price";
+    private final String urlStart = Const.SERVER_IP + "/auction/start";
+    private final String urlEnd = Const.SERVER_IP + "/auction/end";
 
-    EditText warningPrice;
+    EditText cautionPrice;
+    EditText limitation;
+    EditText overTime;
     Button plusOneHundred;
     TextView localPrice;
     TextView webPrice;
@@ -46,7 +43,9 @@ public class ActivityUpdateAuction extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_auction);
 
-        warningPrice = (EditText) findViewById(R.id.warning_price);
+        cautionPrice = (EditText) findViewById(R.id.caution_price);
+        limitation = (EditText) findViewById(R.id.limitation);
+        overTime = (EditText) findViewById(R.id.over_time);
         plusOneHundred = (Button) findViewById(R.id.plus_one_hundred);
         localPrice = (TextView) findViewById(R.id.local_price);
         webPrice = (TextView) findViewById(R.id.web_price);
@@ -57,7 +56,7 @@ public class ActivityUpdateAuction extends Activity {
             @Override
             public void onClick(View v) {
                 if (currentPrice == 0) {
-                    currentPrice = Integer.parseInt(warningPrice.getText().toString());
+                    currentPrice = Integer.parseInt(cautionPrice.getText().toString());
                 }
                 currentPrice += 100;
                 localPrice.setText(String.valueOf(currentPrice));
@@ -94,8 +93,16 @@ public class ActivityUpdateAuction extends Activity {
             @Override
             public void onClick(View v) {
                 StartAuction startAuction = new StartAuction();
-                startAuction.cautionPrice = Integer.parseInt(warningPrice.getText().toString());
-                startAuction.overTime = System.currentTimeMillis() + 120000;
+
+                if (XString.IsEmpty(cautionPrice.getText().toString())||XString.IsEmpty(limitation.getText().toString())||XString.IsEmpty(overTime.getText().toString())){
+                    startAuction.cautionPrice = 84800;
+                    startAuction.overTime = 1469244600000L;
+                    startAuction.limitation = 11475;
+                }else {
+                    startAuction.cautionPrice = Integer.parseInt(cautionPrice.getText().toString());
+                    startAuction.overTime = Long.parseLong(overTime.getText().toString());
+                    startAuction.limitation = Integer.parseInt(limitation.getText().toString());
+                }
 
                 RequestBody body = null;
                 try {
@@ -161,46 +168,46 @@ public class ActivityUpdateAuction extends Activity {
         }
     }
 
-    private void getCurrentPrice(String url) {
-        Request request = new Request.Builder()
-                .url(url)
-                .method("GET", null)
-                .build();
-
-        Call call = client.newCall(request);
-
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("tan", e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                final String str = response.body().string();
-
-                final CurrentPrice currPrice = LoganSquare.parse(str, CurrentPrice.class);
-
-                Log.d("tan", "carPrices: " + currPrice.toString());
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                Log.d("tan", "text price:" + webPrice.getText().toString() + " curr price:" + currPrice.price);
-                                if (webPrice.getText().toString().equals("")) {
-                                    webPrice.setText(String.valueOf(currPrice.price));
-                                } else if (Integer.parseInt(webPrice.getText().toString()) < currPrice.price) {
-                                    webPrice.setText(String.valueOf(currPrice.price));
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }
+//    private void getCurrentPrice(String url) {
+//        Request request = new Request.Builder()
+//                .url(url)
+//                .method("GET", null)
+//                .build();
+//
+//        Call call = client.newCall(request);
+//
+//        call.enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Log.d("tan", e.toString());
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, final Response response) throws IOException {
+//                final String str = response.body().string();
+//
+//                final CurrentPrice currPrice = LoganSquare.parse(str, CurrentPrice.class);
+//
+//                Log.d("tan", "carPrices: " + currPrice.toString());
+//                new Handler(Looper.getMainLooper()).post(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+//
+//                            @Override
+//                            public void run() {
+//                                Log.d("tan", "text price:" + webPrice.getText().toString() + " curr price:" + currPrice.price);
+//                                if (webPrice.getText().toString().equals("")) {
+//                                    webPrice.setText(String.valueOf(currPrice.price));
+//                                } else if (Integer.parseInt(webPrice.getText().toString()) < currPrice.price) {
+//                                    webPrice.setText(String.valueOf(currPrice.price));
+//                                }
+//                            }
+//                        });
+//                    }
+//                });
+//            }
+//        });
+//    }
 }

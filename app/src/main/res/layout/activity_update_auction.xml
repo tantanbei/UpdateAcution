@@ -1,52 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/warning_price"
-        android:layout_weight="1"
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <Button
-        android:id="@+id/plus_one_hundred"
-        android:layout_weight="1"
-        android:layout_margin="10dp"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="+100"/>
-    
-    <TextView
-        android:id="@+id/local_price"
         android:layout_weight="1"
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/web_price"
-        android:layout_weight="1"
-        android:layout_margin="10dp"
+        <EditText
+            android:id="@+id/caution_price"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:hint="caution price" />
+
+        <EditText
+            android:id="@+id/limitation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:hint="limitation" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/over_time"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:hint="over time" />
 
     <Button
         android:id="@+id/start"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:layout_weight="1"
-        android:text="start"
-        android:layout_gravity="center"/>
+        android:text="start" />
+
+    <Button
+        android:id="@+id/plus_one_hundred"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:text="+100" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/add_one"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="+1" />
+
+        <Button
+            android:id="@+id/add_ten"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="+10" />
+
+        <Button
+            android:id="@+id/add_hundred"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="+100" />
+
+        <Button
+            android:id="@+id/add_thousand"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="+1000" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/local_price"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/web_price"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/end"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:layout_weight="1"
-        android:text="end"
-        android:layout_gravity="center"/>
+        android:text="end" />
 
 </LinearLayout>
