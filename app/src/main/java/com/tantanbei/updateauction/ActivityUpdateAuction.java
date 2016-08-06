@@ -98,7 +98,7 @@ public class ActivityUpdateAuction extends Activity {
 
                 if (XString.IsEmpty(cautionPrice.getText().toString()) || XString.IsEmpty(limitation.getText().toString()) || XString.IsEmpty(overTime.getText().toString())) {
                     startAuction.cautionPrice = 84800;
-                    startAuction.overTime = 1469244600000L;
+                    startAuction.overTime = 1472268600000L;
                     startAuction.limitation = 11475;
                 } else {
                     startAuction.cautionPrice = Integer.parseInt(cautionPrice.getText().toString());
