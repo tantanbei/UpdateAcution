@@ -27,11 +27,11 @@ import okhttp3.Response;
 public class ActivityUpdateAuction extends Activity {
 
     public static final MediaType TEXT = MediaType.parse("text/plain; charset=utf-8");
-    private final String urlUpdatePrice = Const.SERVER_IP + "/auction/update";
-    private final String urlUpdatePeople = Const.SERVER_IP + "/auction/update/people";
-    private final String urlGet = Const.SERVER_IP + "/auction/price";
-    private final String urlStart = Const.SERVER_IP + "/auction/start";
-    private final String urlEnd = Const.SERVER_IP + "/auction/end";
+    private final String urlUpdatePrice = Const.SERVER_IP + "/apn/auction/update";
+    private final String urlUpdatePeople = Const.SERVER_IP + "/apn/auction/update/people";
+    private final String urlGet = Const.SERVER_IP + "/apn/auction/price";
+    private final String urlStart = Const.SERVER_IP + "/apn/auction/start";
+    private final String urlEnd = Const.SERVER_IP + "/apn/auction/end";
 
     Timer timer = new Timer(true);
     TimerTask timerTask;
@@ -205,7 +205,7 @@ public class ActivityUpdateAuction extends Activity {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                getCurrentPrice(Const.SERVER_IP + "/auction/price");
+                getCurrentPrice(Const.SERVER_IP + "/apn/auction/price");
             }
         };
 
